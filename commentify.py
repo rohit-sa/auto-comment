@@ -61,11 +61,10 @@ and adds comment template if missing
 """
 def commentify(file_contents,comments):
     
-    func_comment_count = 0
-    func_def_regex = re.compile(r'def')
+    func_def_regex = re.compile(r'\ *def')
     func_name_regex = re.compile(r'\ (.*)\(')
     in_param_regex = re.compile(r'\((.*)\)')
-    comment_regex = re.compile(r'"""')
+    commented_regex = re.compile(r'\ *"""')
     
     commented_file_contents = []
     comment_format = [None]*2*len(comments)
@@ -76,8 +75,10 @@ def commentify(file_contents,comments):
     for i in range(len(file_contents)):
         line = file_contents[i]
         comment = list(comment_format)
-        
+            
         if re.match(func_def_regex, line):
+            num_whitespaces = len(line) - len(line.strip(' '))
+            comment[:] = [' '*num_whitespaces + c for c in comment]
             func_name = re.search(func_name_regex,line)
             comment[2] = comment[2] + func_name.group(1)
             
@@ -89,9 +90,7 @@ def commentify(file_contents,comments):
                  
             prev_line = file_contents[i-1]
             
-            if re.match(comment_regex,prev_line):
-                func_comment_count += 1
-            else:
+            if not re.match(commented_regex,prev_line):
                 commented_file_contents += comment
                 
         commented_file_contents.append(line)
