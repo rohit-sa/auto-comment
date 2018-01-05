@@ -14,7 +14,8 @@ import re
 """
 function: input_handling
 input parameters: file_ext = '.py'
-Notes: 
+Notes: Generates filepaths under current directory/user specified
+directory/file
 """
 def input_handling(file_ext = '.py'):
     
@@ -55,7 +56,8 @@ def input_handling(file_ext = '.py'):
 """
 function: commentify
 input parameters: file_contents,comments
-Notes: 
+Notes: Searchs for comments above user defined functions
+and adds comment template if missing
 """
 def commentify(file_contents,comments):
     
@@ -101,7 +103,7 @@ def commentify(file_contents,comments):
 """
 function: file_handling
 input parameters: filename,comments=None
-Notes: 
+Notes: Basic file I/O
 """
 def file_handling(filename,comments=None):
     if comments is None:
@@ -124,7 +126,7 @@ def file_handling(filename,comments=None):
 """
 function: main
 input parameters: 
-Notes: 
+Notes: Calls above functions in order
 """
 def main():
     print('Running')
