@@ -10,12 +10,13 @@ import sys
 import re
 
 
+
 """
 function: input_handling
-input parameters: 
+input parameters: file_ext = '.py'
 Notes: 
 """
-def input_handling():
+def input_handling(file_ext = '.py'):
     
     user_def_filepaths = []
     target_filepaths = []
@@ -50,12 +51,13 @@ def input_handling():
     else:
         return user_def_filepaths
 
+
 """
 function: commentify
-input parameters: file_contents
+input parameters: file_contents,comments
 Notes: 
 """
-def commentify(file_contents):
+def commentify(file_contents,comments):
     
     func_comment_count = 0
     func_def_regex = re.compile(r'def')
@@ -64,7 +66,6 @@ def commentify(file_contents):
     comment_regex = re.compile(r'"""')
     
     commented_file_contents = []
-    comments = ['"""','function: ','input parameters: ','Notes: ','"""']
     comment_format = [None]*2*len(comments)
     comment_format[0::2] = comments
     comment_format[1::2] = ['\n']*len(comments)
@@ -96,13 +97,15 @@ def commentify(file_contents):
 
     return commented_file_contents
 
+
 """
 function: file_handling
-input parameters: filename 
+input parameters: filename,comments=None
 Notes: 
 """
-def file_handling(filename ):
-    
+def file_handling(filename,comments=None):
+    if comments is None:
+        comments = ['"""','function: ','input parameters: ','Notes: ','"""']
     assert os.path.isfile(filename),'Invalid filepath'
     print(filename)
     file_contents = []
@@ -111,7 +114,7 @@ def file_handling(filename ):
             file_contents.append(line)
 #    print(file_contents)
 #    print(len(file_contents))
-    commented_file_contents = commentify(file_contents)
+    commented_file_contents = commentify(file_contents,comments)
     
     with open(filename,'w') as f_handle:
         for line in commented_file_contents:
@@ -125,9 +128,11 @@ Notes:
 """
 def main():
     print('Running')
-    target_files = input_handling()
+    file_ext = '.py'
+    comments = ['"""','function: ','input parameters: ','Notes: ','"""']
+    target_files = input_handling(file_ext)
     for file in target_files:
-        file_handling(file)
+        file_handling(file,comments)
     return
 
 if __name__ == '__main__':
