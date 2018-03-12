@@ -79,8 +79,11 @@ def commentify(file_contents,comments):
         if re.match(func_def_regex, line):
             num_whitespaces = len(line) - len(line.strip(' '))
             comment[:] = [' '*num_whitespaces + c for c in comment]
-            func_name = re.search(func_name_regex,line)
-            comment[2] = comment[2] + func_name.group(1)
+            func_name = re.search(func_name_regex, line)
+            func_name = func_name.group(1)#
+            if 'def' in func_name:
+                func_name = re.sub(func_def_regex, '', func_name).strip(' ')
+            comment[2] = comment[2] + func_name
             
             in_param_name = re.search(in_param_regex,line)
             if len(in_param_name.group(1)) != 0 :
@@ -113,8 +116,6 @@ def file_handling(filename,comments=None):
     with open(filename,'r+') as f_handle:
         for line in f_handle:
             file_contents.append(line)
-#    print(file_contents)
-#    print(len(file_contents))
     commented_file_contents = commentify(file_contents,comments)
     
     with open(filename,'w') as f_handle:
